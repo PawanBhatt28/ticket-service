@@ -1,12 +1,13 @@
 package com.kapture.ticketservice.service;
 
 import com.kapture.ticketservice.mapper.TicketMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.kapture.ticketservice.repository.TicketRepository;
 import com.kapture.ticketservice.dto.ResponseDTO;
 import com.kapture.ticketservice.entity.Ticket;
 import com.kapture.ticketservice.dto.TicketDTO;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class TicketService {
 
@@ -18,39 +19,29 @@ public class TicketService {
     ResponseDTO responseDTO;
     @Autowired
     TicketMapper ticketMapper;
-    @Autowired
-    TicketDTO ticketDTO;
 
-    public ResponseDTO searchTickets(ResponseDTO responseDTO){
-        String status = responseDTO.getStatus();
-
+    public ResponseDTO searchTickets(TicketDTO ticketDTO, String status ){
         if(status.equals("all")){
-            ticketRepository.findAllTickets();
+            return ticketRepository.findAllTickets();
         }
         if(status.equals("single")){
-            ticketRepository.getTicketByIndex(responseDTO.getObject().getClientId(), responseDTO.getObject().getTicketCode());
+            return ticketRepository.getTicketByIndex(ticketDTO.getClientId(), ticketDTO.getTicketCode()));
         }
         if(status.equals("multiple")){
-            ticketRepository.getTicket(responseDTO.getObject());
+            return ticketRepository.getTicket(ticketDTO));
         }
-
-        responseDTO.setHttpStatus(HttpStatus.OK);
-        return responseDTO;
     }
 
-    public ResponseDTO addTicket(ResponseDTO responseDTO){
-        ticket = ticketMapper.map(responseDTO.getObject());
-        ticketRepository.saveTicket(ticket);
-
-        responseDTO.setHttpStatus(HttpStatus.OK);
-        return responseDTO;
+    public ResponseDTO addTicket(TicketDTO ticketDTO){
+        ticket = ticketMapper.map(ticketDTO);
+        return ticketRepository.saveTicket(ticket);
     }
 
-    public ResponseDTO updateTicket(ResponseDTO responseDTO){
-        ticketDTO = responseDTO.getObject();
-        ticketRepository.updateTicket(ticketDTO, 1);
+    public ResponseDTO updateTicket(TicketDTO ticketDTO, int flag){
+        return ticketRepository.updateTicket(ticketDTO, flag);
+    }
 
-        responseDTO.setHttpStatus(HttpStatus.OK);
-        return responseDTO;
+    public ResponseDTO deleteTicket(TicketDTO ticketDTO){
+        return ticketRepository.deleteTicket(ticketDTO.getClientId(), ticket.getTicketCode());
     }
 }

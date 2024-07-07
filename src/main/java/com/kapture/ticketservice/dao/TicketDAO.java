@@ -79,7 +79,6 @@ public class TicketDAO implements TicketRepository {
 		return ticket;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Ticket> getTicket(TicketDTO ticketDTO) {
 		Session session = null;
 		try {
@@ -116,7 +115,6 @@ public class TicketDAO implements TicketRepository {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void updateTicket(TicketDTO ticketDTO, int flag) {
 		Session session = null;
 		Transaction transaction = null;
@@ -148,7 +146,6 @@ public class TicketDAO implements TicketRepository {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void deleteTicket(int ticketCode) {
 		Session session = null;
 		Transaction transaction = null;
@@ -168,7 +165,6 @@ public class TicketDAO implements TicketRepository {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void deleteTicket(int ticketCode, int clientId) {
 		Session session = null;
 		Transaction transaction = null;

@@ -11,6 +11,6 @@ import org.springframework.http.HttpStatus;
 public class ResponseDTO {
     private String message;
     private String status;
-    private TicketDTO object;
+    private Object object;
     private HttpStatus httpStatus;
 }

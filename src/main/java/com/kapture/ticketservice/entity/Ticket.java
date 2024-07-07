@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,11 +55,11 @@ public class Ticket {
 		this.clientId = clientId;
 	}
 
-	public int getTicket_code() {
+	public int getTicketCode() {
 		return ticketCode;
 	}
 
-	public void setTicket_code(int ticket_code) {
+	public void setTicketCode(int ticket_code) {
 		this.ticketCode = ticket_code;
 	}
 
