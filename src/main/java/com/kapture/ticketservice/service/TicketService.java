@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TicketService {
 
-    @Autowired
-    Ticket ticket;
-    @Autowired
     TicketRepository ticketRepository;
-    @Autowired
     TicketMapper ticketMapper;
+
+    @Autowired
+    public TicketService(TicketRepository ticketRepository, TicketMapper ticketMapper){
+        this.ticketRepository = ticketRepository;
+        this.ticketMapper = ticketMapper;
+    }
 
     public List<Ticket> searchTickets(TicketDTO ticketDTO, String status ){
         if(status.equals("all")){

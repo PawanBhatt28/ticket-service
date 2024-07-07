@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kapture.ticketservice.dto.ResponseDTO;
 import com.kapture.ticketservice.dto.TicketDTO;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TicketValidator{
 
     public ResponseDTO fetchTicketValidator(TicketDTO ticketDto){

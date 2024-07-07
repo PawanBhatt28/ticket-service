@@ -13,12 +13,16 @@ import com.kapture.ticketservice.dto.TicketDTO;
 @RestController
 public class TicketController{
 
-    @Autowired
     TicketService ticketService;
-    @Autowired
     TicketValidator ticketValidator;
-    @Autowired
     ResponseDTO responseDTO;
+
+    @Autowired
+    TicketController(TicketService ticketService, TicketValidator ticketValidator, ResponseDTO responseDTO){
+        this.responseDTO = responseDTO;
+        this.ticketValidator = ticketValidator;
+        this.ticketService = ticketService;
+    }
 
     @GetMapping("/searchTicket")
     public ResponseDTO searchTicket(@RequestBody TicketDTO ticketDTO) {

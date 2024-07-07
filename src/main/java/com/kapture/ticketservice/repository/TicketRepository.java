@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.kapture.ticketservice.dto.TicketDTO;
 import com.kapture.ticketservice.entity.Ticket;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface TicketRepository {
 	public void saveTicket(Ticket ticket);
 	public List<Ticket> findAllTickets();

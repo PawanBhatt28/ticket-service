@@ -8,7 +8,6 @@ public class TicketMapper {
 		Ticket ticket = new Ticket();
 		ticket.setClientId(ticketDTO.getClientId());
 		ticket.setStatus(ticketDTO.getStatus());
-		ticket.setTicket_code(ticketDTO.getTicketCode());
 		ticket.setTitle(ticketDTO.getTitle());
 		return ticket;
 	}
