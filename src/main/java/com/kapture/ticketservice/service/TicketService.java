@@ -1,5 +1,6 @@
 package com.kapture.ticketservice.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.kapture.ticketservice.mapper.TicketMapper;
@@ -8,7 +9,9 @@ import com.kapture.ticketservice.entity.Ticket;
 import com.kapture.ticketservice.dto.TicketDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TicketService {
 
     TicketRepository ticketRepository;
@@ -21,27 +24,29 @@ public class TicketService {
     }
 
     public List<Ticket> searchTickets(TicketDTO ticketDTO, String status ){
+        List<Ticket> fetchedTicket = new ArrayList<>();
         if(status.equals("all")){
-            return ticketRepository.findAllTickets();
+            fetchedTicket = ticketRepository.findAllTickets();
         }
         if(status.equals("single")){
-            return List.of(ticketRepository.getTicketByIndex(ticketDTO.getClientId(), ticketDTO.getTicketCode())));
+            fetchedTicket =  List.of(ticketRepository.getTicketByIndex(ticketDTO.getClientId(), ticketDTO.getTicketCode()));
         }
         if(status.equals("multiple")){
-            return ticketRepository.getTicket(ticketDTO));
+            fetchedTicket =  ticketRepository.getTicket(ticketDTO);
         }
+        return fetchedTicket;
     }
 
-    public Ticket addTicket(TicketDTO ticketDTO){
+    public void addTicket(TicketDTO ticketDTO){
         Ticket ticket = ticketMapper.map(ticketDTO);
-        return ticketRepository.saveTicket(ticket);
+        ticketRepository.saveTicket(ticket);
     }
 
-    public Ticket updateTicket(TicketDTO ticketDTO, int flag){
-        return ticketRepository.updateTicket(ticketDTO, flag);
+    public void updateTicket(TicketDTO ticketDTO, int flag){
+        ticketRepository.updateTicket(ticketDTO, flag);
     }
 
-    public Ticket deleteTicket(TicketDTO ticketDTO){
-        return ticketRepository.deleteTicket(ticketDTO.getClientId(), ticket.getTicketCode());
+    public void deleteTicket(TicketDTO ticketDTO){
+        ticketRepository.deleteTicket(ticketDTO.getClientId(), ticketDTO.getTicketCode());
     }
 }

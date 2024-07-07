@@ -108,7 +108,6 @@ public class TicketDAO implements TicketRepository {
 			if (title != null) {
 				query.setParameter("title", title);
 			}
-
 			return query.setMaxResults(ticketDTO.getLimit()).getResultList();
 		} finally {
 			session.close();
@@ -184,5 +183,4 @@ public class TicketDAO implements TicketRepository {
 			session.close();
 		}
 	}
-
 }

@@ -18,8 +18,7 @@ public class TicketController{
     ResponseDTO responseDTO;
 
     @Autowired
-    TicketController(TicketService ticketService, TicketValidator ticketValidator, ResponseDTO responseDTO){
-        this.responseDTO = responseDTO;
+    TicketController(TicketService ticketService, TicketValidator ticketValidator){
         this.ticketValidator = ticketValidator;
         this.ticketService = ticketService;
     }
@@ -47,14 +46,14 @@ public class TicketController{
         if(validationResponse.getStatus().equals("invalid")){
             clientResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
         }else{
-            clientResponse.setObject(ticketService.addTicket((TicketDTO)validationResponse.getObject()));
+            ticketService.addTicket((TicketDTO)validationResponse.getObject());
             clientResponse.setHttpStatus(HttpStatus.CREATED);
         }
 
         return clientResponse;
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseDTO updateTicket(@RequestBody TicketDTO ticketDTO){
         ResponseDTO validationResponse = ticketValidator.updateTicketValidator(ticketDTO);
         ResponseDTO clientResponse = new ResponseDTO();
@@ -62,7 +61,7 @@ public class TicketController{
         if(responseDTO.getStatus().equals("invalid")){
             responseDTO.setHttpStatus(HttpStatus.BAD_REQUEST);
         }else{
-            clientResponse.setObject(ticketService.updateTicket((TicketDTO)validationResponse.getObject(), 1));
+            ticketService.updateTicket((TicketDTO)validationResponse.getObject(), 1);
             clientResponse.setHttpStatus(HttpStatus.OK);
         }
 
@@ -77,7 +76,7 @@ public class TicketController{
         if(responseDTO.getStatus().equals("invalid")){
             responseDTO.setHttpStatus(HttpStatus.BAD_REQUEST);
         }else{
-            clientResponse.setObject(ticketService.deleteTicket((TicketDTO)validationResponse.getObject()));
+            ticketService.deleteTicket((TicketDTO)validationResponse.getObject());
             clientResponse.setHttpStatus(HttpStatus.OK);
         }
 
