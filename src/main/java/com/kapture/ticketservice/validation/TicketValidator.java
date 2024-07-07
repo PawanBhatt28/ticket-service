@@ -7,10 +7,9 @@ import com.kapture.ticketservice.dto.TicketDTO;
 
 public class TicketValidator{
 
-    @Autowired
-    ResponseDTO responseDTO;
-
     public ResponseDTO fetchTicketValidator(TicketDTO ticketDto){
+        ResponseDTO responseDTO = new ResponseDTO();
+
         Integer clientId = ticketDto.getClientId();
         Integer ticketCode = ticketDto.getTicketCode();
         Integer limit = ticketDto.getClientId();
@@ -38,6 +37,8 @@ public class TicketValidator{
     }
 
     public ResponseDTO addTicketValidator(TicketDTO ticketDTO){
+        ResponseDTO responseDTO = new ResponseDTO();
+
         Integer clientId = ticketDTO.getClientId();
         Integer ticketCode = ticketDTO.getTicketCode();
 
@@ -51,6 +52,8 @@ public class TicketValidator{
     }
 
     public ResponseDTO updateTicketValidator(TicketDTO ticketDTO){
+        ResponseDTO responseDTO = new ResponseDTO();
+
         Integer clientId = ticketDTO.getClientId();
         Integer ticketCode = ticketDTO.getTicketCode();
         String status = ticketDTO.getStatus();
@@ -66,6 +69,8 @@ public class TicketValidator{
     }
 
     public ResponseDTO deleteTicketValidator(TicketDTO ticketDTO){
+        ResponseDTO responseDTO = new ResponseDTO();
+
         Integer clientID = ticketDTO.getClientId();
         Integer ticketCode = ticketDTO.getTicketCode();
 

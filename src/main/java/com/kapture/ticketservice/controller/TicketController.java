@@ -3,17 +3,14 @@ package com.kapture.ticketservice.controller;
 import com.kapture.ticketservice.entity.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.kapture.ticketservice.dto.ResponseDTO;
 import com.kapture.ticketservice.service.TicketService;
 import com.kapture.ticketservice.validation.TicketValidator;
 import com.kapture.ticketservice.dto.TicketDTO;
 
-
+@RestController
 public class TicketController{
 
     @Autowired
@@ -47,7 +44,7 @@ public class TicketController{
             clientResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
         }else{
             clientResponse.setObject(ticketService.addTicket((TicketDTO)validationResponse.getObject()));
-            clientResponse.setHttpStatus(HttpStatus.OK);
+            clientResponse.setHttpStatus(HttpStatus.CREATED);
         }
 
         return clientResponse;
