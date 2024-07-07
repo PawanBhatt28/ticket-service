@@ -1,5 +1,6 @@
 package com.kapture.ticketservice.entity;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
@@ -18,7 +19,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="ticket", indexes = {@Index(name="index_clientid_token_code", columnList = "client_id, ticket_code")})
-public class Ticket {
+public class Ticket implements Serializable{
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
