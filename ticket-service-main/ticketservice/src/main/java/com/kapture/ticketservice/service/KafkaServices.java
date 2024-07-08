@@ -12,24 +12,27 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 import com.kapture.ticketservice.constants.Constants;
-import com.kapture.ticketservice.dao.TicketRepository;
-import com.kapture.ticketservice.entity.Ticket;
+import com.kapture.ticketservice.dto.TicketDTO;
 
 @Service
 public class KafkaServices implements Constants {
 
-	private KafkaTemplate<String, Object> kafkaTemplate;
-	private TicketRepository ticketRepository;
-
 	private final Logger logger = LoggerFactory.getLogger(KafkaListener.class);
 
-	public KafkaServices(KafkaTemplate<String, Object> kafkaTemplate, TicketRepository ticketRepository) {
+	
+	private KafkaTemplate<String, Object> kafkaTemplate;
+	private TicketService ticketService;
+
+	
+	public KafkaServices(KafkaTemplate<String, Object> kafkaTemplate, TicketService ticketService) {
 		this.kafkaTemplate = kafkaTemplate;
-		this.ticketRepository = ticketRepository;
+		this.ticketService = ticketService;
 	}
 
-	public List<Ticket> produceTicket(List<Ticket> tickets) {
-		return tickets.stream().peek(ticket -> {
+	public List<TicketDTO> produceTicket(List<TicketDTO> ticketsDTO) {
+
+
+		return ticketsDTO.stream().peek(ticket -> {
 			CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(kafkaTopic, ticket);
 			future.whenComplete((result, exception) -> {
 				if (exception != null) {
@@ -42,9 +45,9 @@ public class KafkaServices implements Constants {
 	}
 
 	@KafkaListener(topics = kafkaTopic, groupId = listenerGroup)
-	public void consumeTicket(Ticket ticket) {
+	public void consumeTicket(TicketDTO ticketDTO) {
 		try {
-			ticketRepository.saveTicket(ticket);
+			ticketService.saveTicket(ticketDTO);
 		} catch (Exception e) {
 			logger.info("Error in Kafka Listener ", e);
 			return;

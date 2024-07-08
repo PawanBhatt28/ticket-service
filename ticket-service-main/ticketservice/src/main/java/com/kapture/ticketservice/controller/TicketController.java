@@ -1,9 +1,8 @@
 package com.kapture.ticketservice.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,18 +13,29 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kapture.ticketservice.dto.ResponseDTO;
 import com.kapture.ticketservice.dto.TicketDTO;
 import com.kapture.ticketservice.entity.Ticket;
+import com.kapture.ticketservice.service.KafkaServices;
 import com.kapture.ticketservice.service.TicketService;
 import com.kapture.ticketservice.util.InvalidInputException;
+import com.kapture.ticketservice.util.TicketMapper;
 import com.kapture.ticketservice.validation.RequestValidator;
 
 @RestController
 public class TicketController {
 
-	@Autowired
 	private TicketService ticketService;
-
-	@Autowired
+	private TicketMapper ticketMapper;
 	private RequestValidator requestValidator;
+	private KafkaServices kafkaServices;
+	
+	
+
+	public TicketController(TicketService ticketService, TicketMapper ticketMapper, RequestValidator requestValidator,
+			KafkaServices kafkaServices) {
+		this.ticketService = ticketService;
+		this.ticketMapper = ticketMapper;
+		this.requestValidator = requestValidator;
+		this.kafkaServices = kafkaServices;
+	}
 
 	@PostMapping("ticket")
 	public ResponseDTO ResposeDTO(@RequestBody TicketDTO ticketDTO) throws InvalidInputException {
@@ -38,20 +48,21 @@ public class TicketController {
 	}
 
 	@PostMapping("tickets")
-	public ResponseDTO saveTickets(@RequestBody List<TicketDTO> tickets) throws InvalidInputException {
+	public ResponseDTO saveTickets(@RequestBody List<TicketDTO> ticketsDTO) throws InvalidInputException {
 		ResponseDTO responseDTO = new ResponseDTO();
-		for (TicketDTO ticketDTO : tickets) {
+		for (TicketDTO ticketDTO : ticketsDTO) {
 			responseDTO = requestValidator.postRequestValidator(ticketDTO);
 			if (responseDTO.getStatus().equals("Failure")) {
 				return responseDTO;
 			}
 		}
-		responseDTO.setObject(ticketService.saveTicket(tickets));
+		List<Ticket> tickets = kafkaServices.produceTicket(ticketsDTO).stream()
+				.map(ticketDTO -> ticketMapper.map(ticketDTO)).collect(Collectors.toList());
+		responseDTO.setObject(tickets);
 		return responseDTO;
 
 	}
 
-	@Cacheable(key = "#clientId + '-' + #ticketCode", value = "Ticket")
 	@GetMapping("ticket/{clientId}/{ticketCode}")
 	public ResponseDTO getTicket(@PathVariable int clientId, @PathVariable int ticketCode)
 			throws InvalidInputException {
@@ -67,20 +78,17 @@ public class TicketController {
 		ResponseDTO responseDTO = requestValidator.getRequiredValidator(ticketDTO);
 		if (responseDTO.getStatus().equals("Success")) {
 			responseDTO.setObject(ticketService.getTickets(ticketDTO));
-		} 
+		}
 		return responseDTO;
 	}
 
-
 	@PutMapping("update")
-	public ResponseDTO updateTicket(@RequestBody TicketDTO ticketDTO)
-			throws InvalidInputException {
+	public ResponseDTO updateTicket(@RequestBody TicketDTO ticketDTO) throws InvalidInputException {
 		ResponseDTO responseDTO = requestValidator.updateRequestValidator(ticketDTO);
 		if (responseDTO.getStatus().equals("Success")) {
 			responseDTO.setObject(ticketService.updateTicket(ticketDTO));
-		} 
+		}
 		return responseDTO;
 	}
-
 
 }

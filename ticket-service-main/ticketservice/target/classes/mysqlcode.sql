@@ -8,6 +8,5 @@ CREATE TABLE ticket (
     ticket_code INTEGER,
     title VARCHAR(255),
     PRIMARY KEY (id),
-    UNIQUE KEY (ticket_code),
     unique  INDEX index_clientid_ticket_code (client_id, ticket_code)
 ) ENGINE=InnoDB;
